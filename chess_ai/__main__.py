@@ -3,6 +3,7 @@ import atexit
 import os
 import shutil
 
+from chess_ai.player.human_player import HumanChessGame
 from chess_ai.player.random_player import play_a_random_game
 from chess_ai.player.stockfish_player import play_a_stockfish_game
 from chess_ai.player.supervised_model_player import play_a_supervised_model_game
@@ -32,10 +33,12 @@ def main() -> None:
     args = parser.parse_args()
     if args.supervised:
         play_a_supervised_model_game()
-    if args.random:
+    elif args.random:
         play_a_random_game()
-    if args.stockfish >= 100:
+    elif args.stockfish >= 100:
         play_a_stockfish_game(elo=args.stockfish)
+    else:
+        HumanChessGame().run()
 
 
 if __name__ == "__main__":

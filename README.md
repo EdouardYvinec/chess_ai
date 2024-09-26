@@ -12,3 +12,8 @@ or use a supervised model (trained from stockfish)
 ```bash
 play --supervised
 ```
+
+## todo
+- [ ] debug training protocol
+- [ ] show that the game is over (visual)
+- [ ] fix the margin issues (visual)
