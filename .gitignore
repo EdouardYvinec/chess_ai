@@ -1,0 +1,7 @@
+.mypy_cache/
+.venv/
+img/
+model/
+train_set/
+__pycache__/
+*.gif

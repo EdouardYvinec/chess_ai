@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "chess_ai"
+version = "0.1.0"
+description = ""
+authors = ["Edouard Yvinec <edouardyvinec@hotmail.fr>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+chess = "^1.10.0"
+cairosvg = "^2.7.1"
+pillow = "^10.4.0"
+stockfish = "^3.28.0"
+loadingpy = "^0.1.4"
+torch = "^2.4.1"
+mypy = "^1.11.2"
+
+[tool.poetry.scripts]
+play = "chess_ai.__main__:main"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
