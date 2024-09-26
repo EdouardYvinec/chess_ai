@@ -5,6 +5,7 @@ import shutil
 
 from chess_ai.player.human_player import HumanChessGame
 from chess_ai.player.random_player import play_a_random_game
+from chess_ai.player.select import OpponentSelector
 from chess_ai.player.stockfish_player import play_a_stockfish_game
 from chess_ai.player.supervised_model_player import play_a_supervised_model_game
 
@@ -38,7 +39,9 @@ def main() -> None:
     elif args.stockfish >= 100:
         play_a_stockfish_game(elo=args.stockfish)
     else:
-        HumanChessGame().run()
+        opponent = OpponentSelector().select()
+        if opponent != "":
+            HumanChessGame(opponent=opponent).run()
 
 
 if __name__ == "__main__":

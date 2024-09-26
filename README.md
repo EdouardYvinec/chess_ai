@@ -15,5 +15,4 @@ play --supervised
 
 ## todo
 - [ ] debug training protocol
-- [ ] show that the game is over (visual)
-- [ ] fix the margin issues (visual)
+- [ ] save and load game
