@@ -135,7 +135,7 @@ class PositionalEncoding(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         """
         Arguments:
-            x: Tensor, shape ``[seq_len, batch_size, embedding_dim]``
+            x: Tensor, shape ``[batch_size, seq_len, embedding_dim]``
         """
         x = x.transpose(0, 1)
         x = x + self.pe[: x.size(0)]

@@ -33,7 +33,9 @@ def main() -> None:
     parser.add_argument("--stockfish", type=int, default=-1)
     args = parser.parse_args()
     if args.supervised:
-        play_a_supervised_model_game()
+        play_a_supervised_model_game(
+            num_games=50, max_iterations=5, batch_size=32, num_epochs=50, embedding_dim=64, num_head=8
+        )
     elif args.random:
         play_a_random_game()
     elif args.stockfish >= 100:

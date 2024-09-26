@@ -91,7 +91,6 @@ class SupervisedModel(nn.Module):
 
     def head(self, prediction: Tensor, moves_embeddings: Tensor) -> Tensor:
         distance = torch.norm(moves_embeddings - prediction, dim=-1)
-        print(distance.min(), distance.max())  # debug
         return distance
 
 
@@ -137,7 +136,7 @@ class SupervisedModelTrainer:
         os.makedirs(self.model_folder, exist_ok=True)
         self.num_games = num_games
 
-    def observe_a_game(self, max_iterations: int = 500) -> List[ChessMoveSample]:
+    def observe_a_game(self, max_iterations: int = 5) -> List[ChessMoveSample]:
         data: List[ChessMoveSample] = []
         stockfish_game = StockfishChessGame(play_best=True)
         cpt = 0
@@ -164,10 +163,10 @@ class SupervisedModelTrainer:
         for idx, sample in enumerate(data):
             torch.save(sample, os.path.join(self.data_folder, str(cpt + idx).zfill(6) + ".pt"))
 
-    def create_training_set(self) -> None:
+    def create_training_set(self, max_iterations: int = 5) -> None:
         if self.get_num_data_samples() == 0:
             for _ in PyBar(range(self.num_games), base_str="extract training set"):
-                data = self.observe_a_game()
+                data = self.observe_a_game(max_iterations=max_iterations)
                 self.save_game_actions(data=data)
 
     def train_word2vec(self, vocab_size: int, embedding_dim: int) -> Word2Vec:
@@ -214,9 +213,14 @@ class SupervisedModelTrainer:
         return agent.cuda()
 
     def train(
-        self, batch_size: int = 32, num_epochs: int = 1, embedding_dim: int = 8, num_head: int = 2
+        self,
+        max_iterations: int = 5,
+        batch_size: int = 32,
+        num_epochs: int = 1,
+        embedding_dim: int = 8,
+        num_head: int = 2,
     ) -> SupervisedModel:
-        self.create_training_set()
+        self.create_training_set(max_iterations=max_iterations)
         print(f"we have {self.get_num_data_samples()} training samples.")
         agent = self.get_agent(embedding_dim=embedding_dim, num_head=num_head)
         dataloader = DataLoader(
@@ -224,18 +228,17 @@ class SupervisedModelTrainer:
             batch_size=batch_size,
             collate_fn=SupervisedModelDataset.collate_fn,
         )
-        optimizer = Adam(params=[p for p in agent.parameters() if p.requires_grad], lr=1e-3)
+        optimizer = Adam(params=[p for p in agent.parameters() if p.requires_grad], lr=5e-3)
         loss_fn = nn.CrossEntropyLoss()
         for epoch in range(num_epochs):
             pbar = PyBar(dataloader, base_str=f"epoch {epoch+1}/{num_epochs}")
             for batch in pbar:
                 optimizer.zero_grad()
                 prediction: Tensor = agent(batch["legal_moves"].cuda(), batch["board"].cuda())
-                loss: Tensor = loss_fn(-prediction, batch["ground_truth"].cuda())
+                ground_truth = batch["ground_truth"].cuda()
+                loss: Tensor = loss_fn(-prediction, ground_truth)
                 loss.backward()
                 pbar.monitoring = f"{loss:.5f}".rjust(8)
                 optimizer.step()
-                print(prediction.argmin(dim=-1))  # debug
-                print(batch["ground_truth"])  # debug
         raise ValueError  # debug
         return agent

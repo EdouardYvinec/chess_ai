@@ -24,7 +24,7 @@ class OpponentSelector:
         self.mouseY = 0
         self.clicked = False
 
-    def add_box(self, image: numpy.array, text: str, y: int) -> numpy.array:
+    def add_box(self, image: numpy.ndarray, text: str, y: int) -> numpy.ndarray:
         x = self.img_dim // 2 - self.bbox[0] // 2
         image = cv2.rectangle(image, (x, y), (x + self.bbox[0], y + self.bbox[1]), (36, 255, 12), 1)
         size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 1.5, 2)[0][0]
@@ -39,7 +39,7 @@ class OpponentSelector:
         )
         return image
 
-    def create_menu(self) -> numpy.array:
+    def create_menu(self) -> numpy.ndarray:
         img = numpy.zeros((self.img_dim, self.img_dim, 3), dtype=numpy.uint8)
         for cpt, option in enumerate(self.options):
             img = self.add_box(image=img, text=option, y=400 + (self.bbox[1] + 30) * cpt)
