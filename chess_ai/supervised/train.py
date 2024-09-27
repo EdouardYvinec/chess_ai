@@ -142,11 +142,12 @@ class SupervisedModelTrainer:
         cpt = 0
         while not stockfish_game.game_ended():
             move = stockfish_game.next_move()
-            data.append(
-                ChessMoveSample(
-                    ground_truth=move, legal_moves=stockfish_game.legal_moves(), board=str(stockfish_game.board)
+            if cpt % 2 == 0:
+                data.append(
+                    ChessMoveSample(
+                        ground_truth=move, legal_moves=stockfish_game.legal_moves(), board=str(stockfish_game.board)
+                    )
                 )
-            )
             stockfish_game.play(move)
             cpt += 1
             if cpt == max_iterations:
