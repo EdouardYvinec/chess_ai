@@ -12,6 +12,7 @@ from torch.optim.adam import Adam
 from torch.utils.data import DataLoader, Dataset
 
 from chess_ai.player.stockfish_player import StockfishChessGame
+from chess_ai.player.utils import REPO_ROOT_DIR
 from chess_ai.supervised.transformer_utils import CrossAttentionModel, PositionalEncoding, SelfAttentionModel
 
 ALL_UCI: List[str] = []
@@ -126,8 +127,8 @@ class SupervisedModelDataset(Dataset):
 class SupervisedModelTrainer:
     def __init__(
         self,
-        model_folder: str = os.path.join(os.getcwd(), "model"),
-        data_folder: str = os.path.join(os.getcwd(), "train_set"),
+        model_folder: str = os.path.join(REPO_ROOT_DIR, "model"),
+        data_folder: str = os.path.join(REPO_ROOT_DIR, "train_set"),
         num_games: int = 50,
     ) -> None:
         self.data_folder = data_folder

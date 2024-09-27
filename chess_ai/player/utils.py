@@ -1,6 +1,7 @@
 import contextlib
 import glob
 import os
+import pathlib
 import shutil
 from typing import List, Optional
 
@@ -9,11 +10,13 @@ import chess
 import chess.svg as svg
 from PIL import Image
 
+REPO_ROOT_DIR = str(pathlib.Path(__file__).parent.parent.parent.resolve())
+
 
 class ChessGame:
     def __init__(self, board: Optional[chess.Board] = None) -> None:
         self.board = board if board is not None else chess.Board()
-        self.img_folder = os.path.join(os.getcwd(), "img")
+        self.img_folder = os.path.join(REPO_ROOT_DIR, "img")
         os.makedirs(self.img_folder, exist_ok=True)
 
     def game_ended(self) -> bool:

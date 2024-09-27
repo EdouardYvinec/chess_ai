@@ -4,7 +4,7 @@ from typing import Optional
 import chess
 import torch
 
-from chess_ai.player.utils import ChessGame
+from chess_ai.player.utils import REPO_ROOT_DIR, ChessGame
 from chess_ai.supervised.train import ALL_PIECES, ALL_UCI, SupervisedModel, SupervisedModelTrainer
 
 
@@ -28,7 +28,7 @@ def get_agent(
     num_epochs: int = 1,
     embedding_dim: int = 8,
     num_head: int = 2,
-    model_folder: str = os.path.join(os.getcwd(), "model"),
+    model_folder: str = os.path.join(REPO_ROOT_DIR, "model"),
 ) -> SupervisedModel:
     model_path = os.path.join(model_folder, "agent.pt")
     if not os.path.exists(model_path):
@@ -53,7 +53,7 @@ def get_agent(
 
 
 def play_a_supervised_model_game(
-    model_folder: str = os.path.join(os.getcwd(), "model"),
+    model_folder: str = os.path.join(REPO_ROOT_DIR, "model"),
     num_games: int = 50,
     max_iterations: int = 5,
     batch_size: int = 32,

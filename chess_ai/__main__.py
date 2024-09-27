@@ -8,9 +8,10 @@ from chess_ai.player.random_player import play_a_random_game
 from chess_ai.player.select import OpponentSelector
 from chess_ai.player.stockfish_player import play_a_stockfish_game
 from chess_ai.player.supervised_model_player import play_a_supervised_model_game
+from chess_ai.player.utils import REPO_ROOT_DIR
 
 
-def remove_cache_folders(current_repo: str = os.getcwd()) -> None:
+def remove_cache_folders(current_repo: str = REPO_ROOT_DIR) -> None:
     """Removes all __pycache__ directories in the module.
 
     Args:

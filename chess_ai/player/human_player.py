@@ -11,7 +11,7 @@ from chess import SQUARE_NAMES, Board, Move, Square
 from PIL import Image
 from stockfish import Stockfish
 
-from chess_ai.player.utils import ChessGame
+from chess_ai.player.utils import REPO_ROOT_DIR, ChessGame
 
 
 class StopGame(Exception):
@@ -59,7 +59,7 @@ class HumanChessGame(ChessGame):
     def get_png_board(self, last_move: Optional[Move] = None, fill: Optional[Dict[Square, str]] = None) -> Image.Image:
         if fill is None:
             fill = {}
-        img_path = os.path.join(os.getcwd(), "img", "tmp.png")
+        img_path = os.path.join(REPO_ROOT_DIR, "img", "tmp.png")
         svg_str = svg.board(self.board, fill=fill, lastmove=last_move)
         cairosvg.svg2png(
             bytestring=svg_str.encode(), write_to=img_path, output_width=self.img_dim, output_height=self.img_dim
